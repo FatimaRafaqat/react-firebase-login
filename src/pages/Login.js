@@ -21,7 +21,7 @@ function Login() {
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <input
-          type="email"
+          type="Email"
           placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
