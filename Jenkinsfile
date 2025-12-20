@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        DOCKERHUB_USERNAME = 'fatimarafaqat'
+        DOCKERHUB_USERNAME = 'fatimarifaqat'
     }
 
     stages {
@@ -17,10 +17,10 @@ pipeline {
             steps {
                 script {
                     // Frontend build (project root)
-                    sh 'docker build -t $DOCKERHUB_USERNAME/my-react-frontend:latest -f Dockerfile.frontend .'
+                    bat 'docker build -t %DOCKERHUB_USERNAME%/my-react-frontend:latest -f Dockerfile.frontend .'
 
                     // Backend build
-                    sh 'docker build -t $DOCKERHUB_USERNAME/firebase-backend:latest ./backend'
+                    bat 'docker build -t %DOCKERHUB_USERNAME%/firebase-backend:latest ./backend'
                 }
             }
         }
@@ -28,9 +28,9 @@ pipeline {
         stage('Push Docker Images') {
             steps {
                 script {
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_USERNAME --password-stdin'
-                    sh 'docker push $DOCKERHUB_USERNAME/my-react-frontend:latest'
-                    sh 'docker push $DOCKERHUB_USERNAME/firebase-backend:latest'
+                    bat 'echo %DOCKERHUB_CREDENTIALS_PSW% | docker login -u %DOCKERHUB_USERNAME% --password-stdin'
+                    bat 'docker push %DOCKERHUB_USERNAME%/my-react-frontend:latest'
+                    bat 'docker push %DOCKERHUB_USERNAME%/firebase-backend:latest'
                 }
             }
         }
