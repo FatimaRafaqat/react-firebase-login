@@ -13,7 +13,7 @@ function Signup() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    alert("✅ Account created successfully!");
+    alert("✅ Account create successfully!");
   } catch (err) {
     alert("❌ Signup failed");
   }
