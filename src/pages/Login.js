@@ -10,7 +10,7 @@ function Login() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("✅ Logged success!");
+      alert("✅ Logged in success!");
     } catch (error) {
       alert("❌ " + error.message);
     }
