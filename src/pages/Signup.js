@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
 function Signup() {
@@ -7,14 +6,18 @@ function Signup() {
   const [password, setPassword] = useState("");
 
   const handleSignup = async (e) => {
-    e.preventDefault();
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert("✅ Account created successfully!");
-    } catch (error) {
-      alert("❌ " + error.message);
-    }
-  };
+  e.preventDefault();
+  try {
+    await fetch("http://localhost:5000/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    alert("✅ Account created successfully!");
+  } catch (err) {
+    alert("❌ Signup failed");
+  }
+};
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>

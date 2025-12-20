@@ -1,35 +1,47 @@
 pipeline {
-
-    agent any   // run on your local Jenkins agent
+    agent any
 
     environment {
-        // Add your Vercel token here (or set it from Jenkins > Credentials)
-        VERCEL_TOKEN = credentials('vercel-token')
-        // If you want to use a normal env variable instead:
-        // VERCEL_TOKEN = "${env.VERCEL_TOKEN}"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKERHUB_USERNAME = 'fatimarafaqat'
     }
 
     stages {
-
-        stage('Install Dependencies') {
+        stage('Checkout Code') {
             steps {
-                bat 'npm install'
+                git branch: 'main', url: 'https://github.com/FatimaRafaqat/react-firebase-login.git'
             }
         }
 
-        stage('Build') {
+        stage('Build Docker Images') {
             steps {
-                bat 'npm run build'
+                script {
+                    // Frontend build (project root)
+                    sh 'docker build -t $DOCKERHUB_USERNAME/my-react-frontend:latest -f Dockerfile.frontend .'
+
+                    // Backend build
+                    sh 'docker build -t $DOCKERHUB_USERNAME/firebase-backend:latest ./backend'
+                }
             }
         }
 
-        stage('Deploy') {
+        stage('Push Docker Images') {
             steps {
-                bat """
-                    npx vercel --prod --yes ^
-                    --token=%VERCEL_TOKEN%
-                """
+                script {
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                    sh 'docker push $DOCKERHUB_USERNAME/my-react-frontend:latest'
+                    sh 'docker push $DOCKERHUB_USERNAME/firebase-backend:latest'
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Docker images built & pushed successfully!'
+        }
+        failure {
+            echo '❌ Docker build/push failed!'
         }
     }
 }
