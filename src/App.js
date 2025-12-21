@@ -38,7 +38,7 @@ function LoginPage() {
         const snapshot = await getDocs(collection(db, "test"));
         console.log("✅ Firestore connected! Documents:", snapshot.docs.length);
       } catch (error) {
-        console.error("❌ Firestore connected failed:", error);
+        console.error("❌ Firestore  failed:", error);
       }
     };
     testFirestore();
