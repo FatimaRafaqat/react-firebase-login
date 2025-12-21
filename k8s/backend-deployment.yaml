@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firebase-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: firebase-backend
+  template:
+    metadata:
+      labels:
+        app: firebase-backend
+    spec:
+      containers:
+      - name: firebase-backend
+        image: fatimarafaqat/firebase-backend:latest
+        ports:
+        - containerPort: 5000
